@@ -1,11 +1,11 @@
+//  Maks
 const express = require('express');
-const { getUsers, addUser } = require('../controllers/users.controller');
+const { getAllUsers, postUser, deleteUser } = require('../controllers/users.controller');
 
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/', getUsers);
-
-router.post('/new', addUser);
+router.get('/', getAllUsers);
+router.post('/new', postUser);
+router.delete('/delete/:id', deleteUser);
 
 module.exports = router;
