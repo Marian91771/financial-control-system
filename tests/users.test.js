@@ -22,3 +22,22 @@
 //         expect(res.body.email).toBe('test@b.com');
 //     });
 // });
+
+//  Maks
+const request = require('supertest');
+const app = require('../app');
+
+describe('Users API', () => {
+    it('GET /users — should return all users', async () => {
+        const res = await request(app).get('/users');
+        expect(res.status).toEqual(200);
+        // expect(res.body).toBeInstanceOf(Array);
+    });
+
+    it('DELETE /users/delete/:id — should delete user by id', async () => {
+        const testId = 3; // заміни на ID, який точно є в БД
+        const res = await request(app).delete(`/users/delete/${testId}`);
+        expect(res.status).toEqual(200);
+        expect(res.body).toHaveProperty('message', 'User deleted successfully');
+    });
+});
