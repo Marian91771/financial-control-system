@@ -1,78 +1,40 @@
-const Department = require('../models/department.model');
+//  Maks
+const User = require('../models/user.model');
 
-/**
- * @swagger
- * definitions:
- *   User:
- *     type: object
- *     required:
- *        - id
- *        - firstName
- *        - lastName
- *        - email
- *     properties:
- *       id:
- *         type: number
- *       firstName:
- *         type: string
- *       lastName:
- *         type: string
- *       email:
- *         type: string
- */
-const users = [
-    {
-        id: 1,
-        firstName: 'FirstName1',
-        lastName: 'LastName1',
-        email: 'a1@b.com',
-    },
-    {
-        id: 2,
-        firstName: 'FirstName2',
-        lastName: 'LastName2',
-        email: 'a2@b.com',
-    },
-    {
-        id: 3,
-        firstName: 'FirstName3',
-        lastName: 'LastName3',
-        email: 'a3@b.com',
-    },
-];
-
-/**
- * @swagger
- * /users:
- *   get:
- *     description: Get all users
- *     tags:
- *       - Employee
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: All users
- *         schema:
- *           $ref: '#/definitions/User'
- *       500:
- *         description: Internal server error
- */
-const getUsers = async (req, res) => {
-    // Demo implementation
-    const departments = await Department.getAll();
-    console.log(departments);
-    res.status(200).json(departments);
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.getAll();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Database error' });
+    }
 };
 
-const addUser = async (req, res) => {
-    const user = req.body;
-    user.id = users.length + 1;
-    users.push(user);
-    res.status(201).json(user);
+const postUser = async (req, res) => {
+    const { name, email } = req.query;
+    try {
+        const result = await User.postUser(name, email);
+        res.status(201).json({ message: 'User added', result });
+    } catch (error) {
+        console.error('Error inserting user:', error);
+        res.status(500).json({ error: 'Database error' });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await User.deleteUser(id);
+        res.status(200).json({ message: 'User deleted successfully', result });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Database error' });
+    }
 };
 
 module.exports = {
-    getUsers,
-    addUser,
+    getAllUsers,
+    postUser,
+    deleteUser,
 };
