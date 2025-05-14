@@ -74,6 +74,4 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 
-// Макс:    додаю рутер для юзерів(not sure)
-const usersRouter = require('./routes/users');
-app.use('/users', usersRouter);
+

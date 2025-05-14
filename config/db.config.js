@@ -4,7 +4,7 @@ const config = {
         host: 'localhost',
         user: 'user', // Provide your user here
         password: '12345678', // Provide your password here
-        database: 'clinicdb', // Provide your db name here
+        database: 'financial_control_system_db', // Provide your db name here
         connectTimeout: 60000,
     },
     listPerPage: 10,
