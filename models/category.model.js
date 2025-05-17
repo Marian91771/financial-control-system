@@ -1,13 +1,12 @@
+
 const db = require('./db');
 
-const Category = function(cat) {
-  this.id   = cat.id;
-  this.name = cat.name;
-};
+const Category = {};
 
 Category.getAll = async () => {
+
   const [rows] = await db.query('SELECT * FROM categories');
-  return rows;
+  return rows;  
 };
 
 Category.postCategory = async (name) => {
@@ -15,7 +14,7 @@ Category.postCategory = async (name) => {
     'INSERT INTO categories (name) VALUES (?)',
     [name]
   );
-  return result;  
+  return result; 
 };
 
 Category.updateCategory = async (id, name) => {
@@ -23,7 +22,7 @@ Category.updateCategory = async (id, name) => {
     'UPDATE categories SET name = ? WHERE id = ?',
     [name, id]
   );
-  return result;
+  return result; 
 };
 
 Category.deleteCategory = async (id) => {
@@ -31,7 +30,7 @@ Category.deleteCategory = async (id) => {
     'DELETE FROM categories WHERE id = ?',
     [id]
   );
-  return result;
+  return result; 
 };
 
 module.exports = Category;
