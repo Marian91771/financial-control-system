@@ -17,7 +17,7 @@ User.postUser = async (name, email) => {
     return result;
 };
 
-User.deleteUser = async (id) => {
+User.deleteUser = async id => {
     const query = 'DELETE FROM users WHERE id = ?';
     const result = await db.query(query, [id]);
     return result;
