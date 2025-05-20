@@ -9,6 +9,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const categoriesRouter = require('./routes/categories');
+const transactionsRouter = require('./routes/transactions');
 
 const performanceLogger = require('./middleware/performanceLogger');
 const requestLogger = require('./middleware/requestLogger');
@@ -53,6 +54,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
+app.use('/transactions', transactionsRouter);
 
 app.use((req, res, next) => {
     next(createError(404));
