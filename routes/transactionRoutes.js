@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db.config');
+const db = require('../config/db.config');//updated
 
 router.get('/report', async (req, res) => {
   try {
