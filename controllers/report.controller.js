@@ -1,45 +1,40 @@
-const express = require('express');
-const router = express.Router();
-const db = require('../config/db.config');//updated
+const db = require('../config/db.config');
 
-router.get('/report', async (req, res) => {
+exports.getReport = async (req, res) => {
   try {
     const { date, startDate, endDate, categoryId, userId, minAmount, maxAmount } = req.query;
+
+    const queryParts = [];
+    const params = [];
 
     if (!userId) {
       return res.status(400).json({ error: 'userId is required' });
     }
+    queryParts.push(`"user_id" = ?`);
+    params.push(userId);
 
-    const queryParts = [`t."user_id" = ?`];
-    const params = [userId];
-
-    // Фільтр по точній даті
     if (date) {
-      queryParts.push(`DATE(t."date") = ?`);
+      queryParts.push(`DATE("date") = ?`);
       params.push(date);
     }
 
-    // Фільтр по діапазону дат
     if (startDate && endDate) {
-      queryParts.push(`DATE(t."date") BETWEEN ? AND ?`);
+      queryParts.push(`DATE("date") BETWEEN ? AND ?`);
       params.push(startDate, endDate);
     }
 
-    // Фільтр по категорії
     if (categoryId) {
-      queryParts.push(`t."category_id" = ?`);
+      queryParts.push(`"category_id" = ?`);
       params.push(categoryId);
     }
 
-    // Фільтр по мінімальній сумі
     if (minAmount) {
-      queryParts.push(`t."amount" >= ?`);
+      queryParts.push(`amount >= ?`);
       params.push(minAmount);
     }
 
-    // Фільтр по максимальній сумі
     if (maxAmount) {
-      queryParts.push(`t."amount" <= ?`);
+      queryParts.push(`amount <= ?`);
       params.push(maxAmount);
     }
 
@@ -48,8 +43,8 @@ router.get('/report', async (req, res) => {
     const query = `
       SELECT 
         t.id, t.amount, t.date, t.description, 
-        c.name as category_name, 
-        c.type as category_type
+        c.name AS category_name, 
+        c.type AS category_type
       FROM transactions t
       JOIN categories c ON t.category_id = c.id
       ${whereClause}
@@ -63,6 +58,4 @@ router.get('/report', async (req, res) => {
     console.error('Error generating report:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-});
-
-module.exports = router;
+};
