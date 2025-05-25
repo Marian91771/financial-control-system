@@ -68,3 +68,9 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+//transactionsRoutes(reports)
+// app.js
+const transactionRoutes = require('./routes/transactionRoutes');
+
+// Підключення роутів
+app.use('/api/transactions', transactionRoutes);
