@@ -10,6 +10,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const categoriesRouter = require('./routes/categories');
 const transactionsRouter = require('./routes/transactions');
+const reportRoutes = require('./routes/report');
 
 const performanceLogger = require('./middleware/performanceLogger');
 const requestLogger = require('./middleware/requestLogger');
@@ -55,11 +56,13 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
 app.use('/transactions', transactionsRouter);
-
+app.use('/report', reportRoutes); 
+// 404 error handler
 app.use((req, res, next) => {
     next(createError(404));
 });
 
+// General error handler
 app.use((err, req, res, next) => {
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
