@@ -1,4 +1,4 @@
-const db = require('../models/db'); // Правильний шлях до модуля db
+const db = require('../models/db');
 
 exports.getReport = async (req, res) => {
     try {
@@ -7,11 +7,10 @@ exports.getReport = async (req, res) => {
         const queryParts = [];
         const params = [];
 
-        if (!userId) {
-            return res.status(400).json({ error: 'userId is required' });
+        if (userId) {
+            queryParts.push("t.user_id = ?");
+            params.push(parseInt(userId)); // Ensure userId is treated as a number
         }
-        queryParts.push("t.user_id = ?");
-        params.push(parseInt(userId)); // Ensure userId is treated as a number
 
         if (date) {
             queryParts.push('DATE(t.date) = ?');
@@ -46,9 +45,11 @@ exports.getReport = async (req, res) => {
                 t.amount,
                 t.date,
                 t.note,
+                u.name AS user_name, 
                 c.name AS category_name
             FROM transactions t
             JOIN categories c ON t.category_id = c.id
+            JOIN users u ON t.user_id = u.id
             ${whereClause}
             ORDER BY t.date DESC
         `;
@@ -56,7 +57,7 @@ exports.getReport = async (req, res) => {
         console.log('Generated Query:', query);
         console.log('Query Parameters:', params);
 
-        const [rows] = await db.query(query, params);
+        const rows = await db.query(query, params);
 
         res.json(rows);
     } catch (error) {
